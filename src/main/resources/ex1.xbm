@@ -1,0 +1,20 @@
+input start	0
+input Es0	0
+input Es1	0
+input Es2	0
+
+output done	0
+
+0 1				start+	|	done+
+1 2				Es0+	|	done-
+2 3		    	Es2+	|	done+
+3 4				Es1+	|	done-
+4 5				Es2-	|	done+
+5 6				Es1-	|	done-
+6 7		    	Es2+	|	done+
+7 8	            start-  |	done-
+8 9	            Es0- 	|	done+
+9 0	            Es2-	|	done-
+
+    
+ 

@@ -1,0 +1,7 @@
+input  LA 0      
+output   LR 0
+
+0 1 LA+  | LR+
+1 2 LA-  | LR-
+2 3 LA+  | LR+
+3 0 LA-  | LR-

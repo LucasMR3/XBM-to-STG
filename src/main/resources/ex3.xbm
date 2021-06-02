@@ -1,0 +1,15 @@
+input eq 0
+input prech 1
+input pmotin 0
+
+output  ack 0
+output pmot 0
+output wen 0
+
+
+0 1 eq+      |  pmot+ 
+1 2 pmotin+  |   wen+
+2 3 prech-   |  ack+ 
+3 4 eq-      |   wen-  
+4 5 pmotin-  |   pmot-  
+5 0 prech+   |  ack- 
