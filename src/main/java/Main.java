@@ -45,7 +45,7 @@ public class Main {
 
         Analyzer analyzer = new Analyzer(list);
 
-        return analyzer.declareVariables();
+        return analyzer.interact();
 //        return list;
     }
 
