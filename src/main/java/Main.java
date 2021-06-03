@@ -24,30 +24,26 @@ public class Main {
 
     }
 
-    public static String processData(String line) {
-        System.out.println(line);
-//        Analyzer.declareVariables(line);
-        return null;
+    private static List<String> processData(List<String> file) {
+//        List<String> process = new ArrayList<>();
+        Analyzer analyzer = new Analyzer(file);
+        return analyzer.interact();
     }
 
     private static List<String> readAndProcessData() {
-        List<String> list = new ArrayList<>();
+        List<String> file = new ArrayList<>();
         try {
             while (fileContent.hasNext()) {
                 String a = fileContent.nextLine();
-                if (a == null){
+                if (a == null) {
                     return null;
                 }
-                list.add(a);
+                file.add(a);
             }
         } catch (Exception err) {
             System.err.println("Error " + err);
         }
-
-        Analyzer analyzer = new Analyzer(list);
-
-        return analyzer.interact();
-//        return list;
+        return processData(file);
     }
 
     private static void closeArchive() {
