@@ -9,6 +9,10 @@ public class VariableXBM {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setBoolean(Boolean bool) {
         this.bool = bool;
     }

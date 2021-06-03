@@ -3,16 +3,16 @@ package xbm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExtractVariablesFromXBM {
+public class ExtractVariablesXBM {
 
-    public String getVarPhraseStart(String line) {
+    public String beginLine(String line) {
         Pattern p = Pattern.compile("\\w++");
         Matcher m = p.matcher(line);
         m.find();
         return m.group();
     }
 
-    public String getVariableName(String line) {
+    public String name(String line) {
         Pattern p = Pattern.compile("(?<= )\\w\\w++");
         Matcher m = p.matcher(line);
 
