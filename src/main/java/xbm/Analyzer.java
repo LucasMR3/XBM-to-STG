@@ -24,7 +24,7 @@ public class Analyzer {
             }
 
             if (XBM_FILE.get(i).contains("output")) {
-                extract.getVariableName(XBM_FILE.get(i));
+                this.variables.add(extract.getVariableName(XBM_FILE.get(i)));
             }
 
             if (XBM_FILE.get(i).length() > 0 && XBM_FILE.get(i).substring(0, 1).matches("[0-9]")) {
