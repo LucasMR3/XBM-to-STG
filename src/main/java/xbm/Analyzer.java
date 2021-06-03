@@ -46,11 +46,22 @@ public class Analyzer {
         line = line.substring(3);
         line = line.trim();
 
-        System.out.println(line);
+        System.out.println("\n" + line);
 
         System.out.println(getVarPhraseStart(line));
 
-        System.out.println(getBoolAfterVariable(line, getVarPhraseStart(line)) + "\n");
+        System.out.println(getBoolByVarSymbol(line, getVarPhraseStart(line)));
+
+        line = line.substring(getVarPhraseStart(line).length() + 1);
+        line = line.trim();
+
+        if(line.startsWith("|")){
+            line = line.substring(1);
+            line = line.trim();
+        }
+        System.out.println(getVarPhraseStart(line));
+        System.out.println(getBoolByVarSymbol(line, getVarPhraseStart(line)) + "\n");
+
 
     }
 
@@ -75,7 +86,7 @@ public class Analyzer {
         return m.group();
     }
 
-    private boolean getBoolAfterVariable(String line, String variable) {
+    private boolean getBoolByVarSymbol(String line, String variable) {
         return line.charAt(variable.length()) == '+';
     }
 }
