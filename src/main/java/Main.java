@@ -17,7 +17,7 @@ public class Main {
 
     private static void openArchive() {
         try {
-            fileContent = new Scanner(Paths.get("src/main/resources/ex2.xbm"));
+            fileContent = new Scanner(Paths.get("src/main/resources/ex3.xbm"));
         } catch (IOException errIO) {
             System.err.println("Error while opening file");
         }
@@ -43,7 +43,9 @@ public class Main {
             System.err.println("Error " + err);
         }
 
-       return Analyzer.declareVariables(list);
+        Analyzer analyzer = new Analyzer(list);
+
+        return analyzer.declareVariables();
 //        return list;
     }
 

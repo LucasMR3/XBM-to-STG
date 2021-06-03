@@ -6,39 +6,76 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Analyzer {
-    static List<String> variables = new ArrayList<>();
+    private final List<String> variables = new ArrayList<>();
 
-    public static List<String> declareVariables(List<String> list) {
-//        for (String i : list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).contains("input")) {
-//                System.out.println("\nInput encontrada! =" + list.get(i) + "\n");
-                getVariableName(list.get(i));
+    private final List<String> XBM_FILE;
+
+    public Analyzer(List<String> XBM_FILE) {
+        this.XBM_FILE = XBM_FILE;
+    }
+
+    public List<String> declareVariables() {
+
+        for (int i = 0; i < XBM_FILE.size(); i++) {
+            if (XBM_FILE.get(i).contains("input")) {
+                getVariableName(XBM_FILE.get(i));
             }
 
-            if (list.get(i).contains("output")) {
-//                System.out.println("\nOutput encontrada! =" + list.get(i) + "\n");
-                getVariableName(list.get(i));
+            if (XBM_FILE.get(i).contains("output")) {
+                getVariableName(XBM_FILE.get(i));
+            }
+
+            if (XBM_FILE.get(i).length() > 0 && XBM_FILE.get(i).substring(0, 1).matches("[0-9]")) {
+                executionState(XBM_FILE.get(i));
             }
         }
 
         System.out.println(variables);
 
-        return list;
+        return XBM_FILE;
     }
 
-    private static void getVariableName(String line) {
+    private void executionState(String line) {
+
+        int firstGo = Integer.parseInt(line.substring(0, 1));
+        int secondGo = Integer.parseInt(line.substring(2, 3));
+
+//        System.out.println(firstCommand);
+//        System.out.println(secondCommand);
+
+        line = line.substring(3);
+        line = line.trim();
+
+        System.out.println(line);
+
+        System.out.println(getVarPhraseStart(line));
+
+        System.out.println(getBoolAfterVariable(line, getVarPhraseStart(line)) + "\n");
+
+    }
+
+    private void getVariableName(String line) {
         Pattern p = Pattern.compile("(?<= )\\w\\w++");
         Matcher m = p.matcher(line);
+
+        if (m.find()) {
+            line = line.replace(m.group(), "");
+            line = line.replace("input", "");
+            line = line.replace("output", "");
+            line = line.replace(" ", "");
+//            line = line.trim();
+            this.variables.add(m.group() + "=" + line.substring(line.length() - 1));
+        }
+    }
+
+    private String getVarPhraseStart(String line) {
+        Pattern p = Pattern.compile("\\w++");
+        Matcher m = p.matcher(line);
         m.find();
-//        System.out.println("\noriginal: " + line);
+        return m.group();
+    }
 
-        line = line.replace(m.group(), "");
-        line = line.replace("input", "");
-        line = line.replace("output", "");
-        line = line.replace(" ", "");
-
-//        System.out.println("corte =" + m.group() + " =" + line.substring(line.length() - 1));
-        variables.add(m.group() + "=" + line.substring(line.length() - 1));
+    private boolean getBoolAfterVariable(String line, String variable) {
+        return line.charAt(variable.length()) == '+';
     }
 }
