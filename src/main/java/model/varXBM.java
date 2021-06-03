@@ -1,10 +1,10 @@
 package model;
 
-public class VariableXBM {
+public class varXBM {
     private Boolean bool;
     private final String name;
 
-    public VariableXBM(String name, Boolean bool) {
+    public varXBM(String name, Boolean bool) {
         this.bool = bool;
         this.name = name;
     }

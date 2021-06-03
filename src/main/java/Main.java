@@ -21,6 +21,7 @@ public class Main {
         } catch (IOException errIO) {
             System.err.println("Error while opening file");
         }
+
     }
 
     public static String processData(String line) {

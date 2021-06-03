@@ -3,13 +3,14 @@ package xbm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExtractVariablesXBM {
+public class Extractor {
 
     public String beginLine(String line) {
         Pattern p = Pattern.compile("\\w++");
         Matcher m = p.matcher(line);
-        m.find();
-        return m.group();
+        if (m.find())
+            return m.group();
+        return null;
     }
 
     public String name(String line) {
@@ -20,8 +21,7 @@ public class ExtractVariablesXBM {
             line = line.replace(m.group(), "");
             line = line.replace("input", "");
             line = line.replace("output", "");
-            line = line.replace(" ", "");
-//            line = line.trim();
+            line = line.trim();
             return (m.group() + "=" + line.substring(line.length() - 1));
         }
         return null;
