@@ -17,7 +17,7 @@ public class Main {
 
     private static void openArchive() {
         try {
-            fileContent = new Scanner(Paths.get("src/main/resources/ex3.xbm"));
+            fileContent = new Scanner(Paths.get("src/main/resources/ex1.xbm"));
         } catch (IOException errIO) {
             System.err.println("Error while opening file");
         }

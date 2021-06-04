@@ -1,12 +1,13 @@
 package xbm;
 
-import model.varXBM;
+import model.VarXBM;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Analyzer {
-    private final List<String> variables = new ArrayList<>();
+    private final List<String> inputs = new ArrayList<>();
+    private final List<String> outputs = new ArrayList<>();
 
     private final Extractor extract = new Extractor();
 
@@ -18,21 +19,22 @@ public class Analyzer {
 
     public List<String> interact() {
 
-        for (int i = 0; i < XBM_FILE.size(); i++) {
-            if (XBM_FILE.get(i).contains("input")) {
-                this.variables.add(extract.name(XBM_FILE.get(i)));
+        for (String s : XBM_FILE) {
+            if (s.contains("input")) {
+                this.inputs.add(extract.declarations(s));
             }
 
-            if (XBM_FILE.get(i).contains("output")) {
-                this.variables.add(extract.name(XBM_FILE.get(i)));
+            if (s.contains("output")) {
+                this.outputs.add(extract.declarations(s));
             }
 
-            if (XBM_FILE.get(i).length() > 0 && XBM_FILE.get(i).substring(0, 1).matches("[0-9]")) {
-                execution(XBM_FILE.get(i));
+            if (s.length() > 0 && s.substring(0, 1).matches("[0-9]")) {
+                execution(s);
             }
         }
 
-        System.out.println("\n" + variables);
+        System.out.println("\n" + inputs);
+        System.out.println(outputs);
 
         return XBM_FILE;
     }
@@ -46,17 +48,16 @@ public class Analyzer {
         line = line.substring(3);
         line = line.trim();
 
-        varXBM xbm1 = new varXBM(extract.beginLine(line), boolSymbol(line, extract.beginLine(line)));
+        VarXBM xbm1 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
 
         line = line.substring(xbm1.getName().length() + 1);
         line = line.trim();
 
-        varXBM xbm2 = null;
-
+        VarXBM xbm2 = null;
         if (line.startsWith("|")) {
             line = line.substring(1);
             line = line.trim();
-             xbm2 = new varXBM(extract.beginLine(line), boolSymbol(line, extract.beginLine(line)));
+             xbm2 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
         }
 
         System.out.println("IN = " + in + " GO = " + go);
