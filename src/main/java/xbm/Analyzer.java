@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Analyzer {
-    private final List<String> inputs = new ArrayList<>();
-    private final List<String> outputs = new ArrayList<>();
+    private final List<VarXBM> inputs = new ArrayList<>();
+    private final List<VarXBM> outputs = new ArrayList<>();
 
     private final Extractor extract = new Extractor();
 
@@ -50,6 +50,8 @@ public class Analyzer {
 
         VarXBM xbm1 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
 
+        System.out.println(inputs.get(inputs.indexOf(new VarXBM(extract.name(line), false))));
+
         line = line.substring(xbm1.getName().length() + 1);
         line = line.trim();
 
@@ -57,7 +59,10 @@ public class Analyzer {
         if (line.startsWith("|")) {
             line = line.substring(1);
             line = line.trim();
-             xbm2 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
+            xbm2 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
+
+            outputs.get(outputs.indexOf(new VarXBM(extract.name(line), false))).setBoolean(boolSymbol(line, extract.name(line)));
+            System.out.println(outputs.get(outputs.indexOf(new VarXBM(extract.name(line), false))));
         }
 
         System.out.println("IN = " + in + " GO = " + go);

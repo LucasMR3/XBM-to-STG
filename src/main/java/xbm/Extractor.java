@@ -15,19 +15,16 @@ public class Extractor {
         return null;
     }
 
-    public String declarations(String line) {
+    public VarXBM declarations(String line) {
         line = line.replace("input", "");
         line = line.replace("output", "");
         line = line.trim();
 
         String number = line.substring(line.length() - 1);
-        line = line.replace(number, "");
+        line = line.substring(0, (line.length() - 1));
         line = line.trim();
 
-        VarXBM varXBM = new VarXBM(line, checkBoolean(number));
-        System.out.println(varXBM);
-
-        return (line + "=" + number);
+        return new VarXBM(line, checkBoolean(number));
     }
 
     private boolean checkBoolean(String str) {
