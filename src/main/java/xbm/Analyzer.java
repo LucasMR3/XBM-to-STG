@@ -57,10 +57,6 @@ public class Analyzer {
         steps.add(new Step(in, go, processLine(inputsLine), processLine(outputsLine)));
     }
 
-    private boolean boolSymbol(String line) {
-        return line.charAt(Extractor.first(line)) == '+';
-    }
-
     private List<VarXBM> processLine(String line) {
         List<VarXBM> list = new ArrayList<>();
         String extracted = line.substring(0, Extractor.first(line) + 1);
@@ -77,5 +73,9 @@ public class Analyzer {
         list.add(new VarXBM(extracted.substring(0, extracted.length() - 1), boolSymbol(line)));
 
         return list;
+    }
+
+    private boolean boolSymbol(String line) {
+        return line.charAt(Extractor.first(line)) == '+';
     }
 }
