@@ -1,9 +1,28 @@
 package model;
 
-public class Step {
-    private int inStep;
-    private int goStep;
+import java.util.List;
 
-    private int inputVarIndex;
-    private int outputVarIndex;
+public class Step {
+    private final int inStep;
+    private final int goStep;
+
+    private final List<VarXBM> inXBMStep;
+    private final List<VarXBM> outXBMStep;
+
+    public Step(int inStep, int goStep, List<VarXBM> inXBMStep, List<VarXBM> outXBMStep) {
+        this.inStep = inStep;
+        this.goStep = goStep;
+        this.inXBMStep = inXBMStep;
+        this.outXBMStep = outXBMStep;
+    }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "inStep=" + inStep +
+                ", goStep=" + goStep +
+                ", inXBMStep=" + inXBMStep +
+                ", outXBMStep=" + outXBMStep +
+                '}';
+    }
 }

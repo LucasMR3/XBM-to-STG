@@ -2,22 +2,13 @@ package xbm;
 
 import model.VarXBM;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Extractor {
 
-    public String name(String line) {
-        Pattern p = Pattern.compile("\\w++");
-        Matcher m = p.matcher(line);
-        if (m.find())
-            return m.group();
-        return null;
-    }
-
-    public VarXBM declarations(String line) {
+    public static VarXBM declarations(String line) {
         line = line.replace("input", "");
+        line = line.replace("Input", "");
         line = line.replace("output", "");
+        line = line.replace("Output", "");
         line = line.trim();
 
         String number = line.substring(line.length() - 1);
@@ -27,7 +18,14 @@ public class Extractor {
         return new VarXBM(line, checkBoolean(number));
     }
 
-    private boolean checkBoolean(String str) {
+    private static boolean checkBoolean(String str) {
         return str.equals("1");
+    }
+
+    public static int first(String line) {
+        int minus = (line.indexOf('-') != -1 ? line.indexOf('-') : 1000);
+        int plus = (line.indexOf('+') != -1 ? line.indexOf('+') : 1000);
+
+        return Math.min(minus, plus);
     }
 }

@@ -1,6 +1,9 @@
 package xbm;
 
+import model.XBMCode;
+import model.Step;
 import model.VarXBM;
+import stg.Compiler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,7 @@ public class Analyzer {
     private final List<VarXBM> inputs = new ArrayList<>();
     private final List<VarXBM> outputs = new ArrayList<>();
 
-    private final Extractor extract = new Extractor();
+    private final List<Step> steps = new ArrayList<>();
 
     private final List<String> XBM_FILE;
 
@@ -19,57 +22,60 @@ public class Analyzer {
 
     public List<String> interact() {
 
-        for (String s : XBM_FILE) {
-            if (s.contains("input")) {
-                this.inputs.add(extract.declarations(s));
+        for (String line : XBM_FILE) {
+            if (line.toLowerCase().contains("input")) {
+                this.inputs.add(Extractor.declarations(line));
             }
 
-            if (s.contains("output")) {
-                this.outputs.add(extract.declarations(s));
+            if (line.toLowerCase().contains("output")) {
+                this.outputs.add(Extractor.declarations(line));
             }
 
-            if (s.length() > 0 && s.substring(0, 1).matches("[0-9]")) {
-                execution(s);
+            if (line.length() > 0 && line.substring(0, 1).matches("[0-9]")) {
+                execution(line);
             }
         }
 
-        System.out.println("\n" + inputs);
-        System.out.println(outputs);
+        XBMCode XBMCode = new XBMCode(inputs, outputs, steps);
+
+        Compiler compiler = new Compiler(XBMCode);
+        compiler.Compile();
 
         return XBM_FILE;
     }
 
     private void execution(String line) {
-        System.out.println("\n" + line);
-
         int in = Integer.parseInt(line.substring(0, 1));
         int go = Integer.parseInt(line.substring(2, 3));
 
-        line = line.substring(3);
-        line = line.trim();
+        String inputsLine = line.substring(3, line.indexOf("|"));
+        String outputsLine = line.substring(line.indexOf("|") + 1);
 
-        VarXBM xbm1 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
+        inputsLine = inputsLine.trim();
+        outputsLine = outputsLine.trim();
 
-        System.out.println(inputs.get(inputs.indexOf(new VarXBM(extract.name(line), false))));
-
-        line = line.substring(xbm1.getName().length() + 1);
-        line = line.trim();
-
-        VarXBM xbm2 = null;
-        if (line.startsWith("|")) {
-            line = line.substring(1);
-            line = line.trim();
-            xbm2 = new VarXBM(extract.name(line), boolSymbol(line, extract.name(line)));
-
-            outputs.get(outputs.indexOf(new VarXBM(extract.name(line), false))).setBoolean(boolSymbol(line, extract.name(line)));
-            System.out.println(outputs.get(outputs.indexOf(new VarXBM(extract.name(line), false))));
-        }
-
-        System.out.println("IN = " + in + " GO = " + go);
-        System.out.println(xbm1 + " " + xbm2);
+        steps.add(new Step(in, go, processLine(inputsLine), processLine(outputsLine)));
     }
 
-    private boolean boolSymbol(String line, String variable) {
-        return line.charAt(variable.length()) == '+';
+    private boolean boolSymbol(String line) {
+        return line.charAt(Extractor.first(line)) == '+';
+    }
+
+    private List<VarXBM> processLine(String line) {
+        List<VarXBM> list = new ArrayList<>();
+        String extracted = line.substring(0, Extractor.first(line) + 1);
+
+        while (line.length() != extracted.length()) {
+            list.add(new VarXBM(extracted.substring(0, extracted.length() - 1), boolSymbol(line)));
+
+            line = line.substring(extracted.length());
+            line = line.trim();
+            extracted = line.substring(0, Extractor.first(line) + 1);
+        }
+
+        extracted = extracted.trim();
+        list.add(new VarXBM(extracted.substring(0, extracted.length() - 1), boolSymbol(line)));
+
+        return list;
     }
 }

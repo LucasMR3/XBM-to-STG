@@ -1,0 +1,10 @@
+Input LA 0
+Input DA 0
+Input ZA 0
+output LR 1
+output DR 0
+output ZR 0
+0 1 LA+ DA+ | LR- DR+
+1 2 LA- DA+ | ZR+
+2 3 ZA+ | DR- ZR-
+3 0 DA- ZA- | LR+
