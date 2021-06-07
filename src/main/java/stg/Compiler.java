@@ -9,35 +9,56 @@ public class Compiler {
         this.x = x;
     }
 
-    public void Compile(){
+    public void Compile() {
 //        System.out.println(compiler);
 
-        System.out.print("\ninputs ");
-        for (int i = 0; i < x.inputs().size(); i++){
+        System.out.print("\n.inputs ");
+        for (int i = 0; i < x.inputs().size(); i++) {
             System.out.print(x.inputs().get(i).getName() + " ");
         }
 
-        System.out.print("\noutputs ");
-        for (int i = 0; i < x.outputs().size(); i++){
+        System.out.print("\n.outputs ");
+        for (int i = 0; i < x.outputs().size(); i++) {
             System.out.print(x.outputs().get(i).getName() + " ");
         }
 
-        System.out.print("\nSTEPS\n");
-        for (int i = 0; i < x.steps().size(); i++){
-            System.out.println(x.steps().get(i) + " ");
-//
-//            String a = c.inputs().get(c.steps().get(i).getInputVarIndex()).getName() + Service.convertBoolToSymbol(c.steps().get(i).getInputVar());
-//
-//            System.out.println("P" + c.steps().get(i).getInStep() + " " + a);
-//
-//            System.out.print(a + " P" + c.steps().get(i).getGoStep());
-//
-//            System.out.print(a + " P" + c.steps().get(i).getGoStep());
-//
-//            System.out.println();
+        System.out.print("\n.graph");
+
+        System.out.print("\n\nSTEPS\n");
+
+        int places = -1;
+        String last = null;
+
+        for (int i = 0; i < x.steps().size(); i++) {
+//            System.out.println(x.steps().get(i) + " ");
+
+            for (int j = 0; j < x.steps().get(i).getInXBMStep().size(); j++) {
+                places++;
+                if (last != null)
+                    System.out.println(last);
+
+                System.out.print("p" + places + " ");
+                System.out.println(x.steps().get(i).getInXBMStep().get(j) + " ");
+                last = String.valueOf(x.steps().get(i).getInXBMStep().get(j));
+
+                for (int h = 0; h < x.steps().get(h).getOutXBMStep().size(); h++) {
+                    places++;
+                    System.out.println(last + " p" + places + " ");
+//                    System.out.println("o/");
+                    System.out.println(x.steps().get(i).getOutXBMStep().get(h) + " ");
+                    last = String.valueOf(x.steps().get(i).getOutXBMStep().get(h));
+                }
+//                System.out.println(last);
+            }
+
+            System.out.println();
         }
 
         System.out.println();
+
+    }
+
+    private void dealConcurrence() {
 
     }
 

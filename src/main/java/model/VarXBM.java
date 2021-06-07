@@ -1,5 +1,7 @@
 package model;
 
+import stg.Service;
+
 import java.util.Objects;
 
 public class VarXBM {
@@ -34,8 +36,6 @@ public class VarXBM {
 
     @Override
     public String toString() {
-        return '{' +
-                name + '=' + bool +
-                '}';
+        return name + Service.convertBoolToSymbol(bool);
     }
 }

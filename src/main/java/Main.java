@@ -17,7 +17,7 @@ public class Main {
 
     private static void openArchive() {
         try {
-            fileContent = new Scanner(Paths.get("src/main/resources/concurrence.xbm"));
+            fileContent = new Scanner(Paths.get("src/main/resources/simple.xbm"));
         } catch (IOException errIO) {
             System.err.println("Error while opening file");
         }

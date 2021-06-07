@@ -1,0 +1,4 @@
+input a 0
+output r 0
+1 2 a+ | r+
+2 1 a- | r-
