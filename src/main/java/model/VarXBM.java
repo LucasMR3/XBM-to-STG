@@ -1,6 +1,6 @@
 package model;
 
-import stg.Service;
+import service.Service;
 
 import java.util.Objects;
 

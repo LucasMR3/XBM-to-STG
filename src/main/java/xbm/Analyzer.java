@@ -35,6 +35,10 @@ public class Analyzer {
                 execution(line);
             }
         }
+        if (!checkIfVarOnStepExists(inputs, outputs, steps)) {
+            System.err.println("Erro, variáveis usadas na execução não existem na declaração!");
+            return null;
+        }
 
         XBMCode XBMCode = new XBMCode(inputs, outputs, steps);
 
@@ -78,4 +82,24 @@ public class Analyzer {
     private boolean boolSymbol(String line) {
         return line.charAt(Extractor.first(line)) == '+';
     }
+
+    private boolean checkIfVarOnStepExists(List<VarXBM> inputs, List<VarXBM> outputs, List<Step> steps) {
+        for (Step step : steps) {
+            for (int j = 0; j < step.getInXBMStep().size(); j++) {
+                if (!inputs.contains(step.getInXBMStep().get(j))) {
+                    System.err.println("ERROR!");
+                    return false;
+                }
+            }
+
+            for (int j = 0; j < step.getOutXBMStep().size(); j++) {
+                if (!outputs.contains(step.getOutXBMStep().get(j))) {
+                    System.err.println("ERROR!");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
+

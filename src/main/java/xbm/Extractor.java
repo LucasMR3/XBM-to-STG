@@ -2,6 +2,8 @@ package xbm;
 
 import model.VarXBM;
 
+import static service.Service.checkBoolean;
+
 public class Extractor {
 
     public static VarXBM declarations(String line) {
@@ -16,10 +18,6 @@ public class Extractor {
         line = line.trim();
 
         return new VarXBM(line, checkBoolean(number));
-    }
-
-    private static boolean checkBoolean(String str) {
-        return str.equals("1");
     }
 
     public static int first(String line) {

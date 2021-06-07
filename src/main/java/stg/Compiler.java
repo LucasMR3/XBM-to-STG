@@ -126,7 +126,6 @@ public class Compiler {
                 printAndWrite("p" + p + " ");
             }
             printAndWritePlus("");
-
         }
 
         for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
@@ -144,7 +143,6 @@ public class Compiler {
             printAndWrite(" p" + i + " ");
         }
         printAndWritePlus("}");
-
     }
 
     private void printAndWrite(String line){

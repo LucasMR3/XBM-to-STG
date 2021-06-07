@@ -1,4 +1,4 @@
-package stg;
+package service;
 
 public class Service {
 
@@ -6,5 +6,9 @@ public class Service {
         if(bool) {
             return "+";
         } else return "-";
+    }
+
+    public static boolean checkBoolean(String str) {
+        return str.equals("1");
     }
 }

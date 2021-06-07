@@ -6,11 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// CI73A
+// Arthur Lobo
+// Jackson Nikolay
+// Lucas Muniz
+// Miguel Awad
+
 public class Main {
     private static Scanner fileContent;
 
     public static void main(String[] args) {
-        String fileName = "concurrence-simple";
+        String fileName = "ex1";
         openArchive(fileName);
         processData(readFile(), fileName);
         closeArchive();
