@@ -1,13 +1,19 @@
 package stg;
 
+import model.VarXBM;
 import model.XBMCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Compiler {
-    XBMCode x;
-    String fileName;
+    private final XBMCode x;
+    private final String fileName;
+
+    List<String> toWrite = new ArrayList<>();
+
+    int places = -1;
+    String last = null;
 
     public Compiler(XBMCode x, String fileName) {
         this.x = x;
@@ -15,78 +21,139 @@ public class Compiler {
     }
 
     public void Compile() {
-        List<String> toWrite = new ArrayList<>();
-//        System.out.println(compiler);
-
-        System.out.print("\n.inputs ");
-        toWrite.add(".inputs ");
+        printAndWrite("\n.inputs ");
         for (int i = 0; i < x.inputs().size(); i++) {
-            System.out.print(x.inputs().get(i).getName() + " ");
-            toWrite.add(x.inputs().get(i).getName() + " ");
+            printAndWrite(x.inputs().get(i).getName() + " ");
         }
 
-        System.out.print("\n.outputs ");
-        toWrite.add("\n.outputs ");
+        printAndWrite("\n.outputs ");
         for (int i = 0; i < x.outputs().size(); i++) {
-            System.out.print(x.outputs().get(i).getName() + " ");
-            toWrite.add(x.outputs().get(i).getName() + " ");
+            printAndWrite(x.outputs().get(i).getName() + " ");
         }
 
-        System.out.print("\n.graph\n");
-        toWrite.add("\n.graph\n");
+        printAndWrite("\n.graph\n");
 
-//        System.out.print("\n\nSTEPS\n");
+        boolean hasConcurrence = false;
 
-        int places = -1;
-        String last = null;
+        if (x.steps().get(0).getInXBMStep().size() == 1 && x.steps().get(0).getOutXBMStep().size() == 1) {
 
-        for (int i = 0; i < x.steps().size(); i++) {
-//            System.out.println(x.steps().get(i) + " ");
-
-            for (int j = 0; j < x.steps().get(i).getInXBMStep().size(); j++) {
+            for (int i = 0; i < x.steps().size(); i++) {
                 places++;
                 if (last != null) {
-                    System.out.println(last + " p" + places + " ");
-                    toWrite.add(last + " p" + places + "\n");
-                    System.out.println("p" + places + " " + x.steps().get(i).getInXBMStep().get(j));
-                    toWrite.add("p" + places + " " + x.steps().get(i).getInXBMStep().get(j) + '\n');
-                    last = String.valueOf(x.steps().get(i).getInXBMStep().get(j));
+                    printAndWritePlus(last + " p" + places + " ");
+                    printAndWritePlus("p" + places + " " + x.steps().get(i).getInXBMStep().get(0));
                 } else {
-                    System.out.print("p" + places + " ");
-                    toWrite.add("p" + places + " ");
-                    System.out.println(x.steps().get(i).getInXBMStep().get(j) + "");
-                    toWrite.add(x.steps().get(i).getInXBMStep().get(j) + "\n");
-                    last = String.valueOf(x.steps().get(i).getInXBMStep().get(j));
+                    printAndWrite("p" + places + " ");
+                    printAndWritePlus(x.steps().get(i).getInXBMStep().get(0) + "");
                 }
-            }
-            for (int h = 0; h < x.steps().get(h).getOutXBMStep().size(); h++) {
+                last = String.valueOf(x.steps().get(i).getInXBMStep().get(0));
+
                 places++;
-                System.out.println(last + " p" + places + " ");
-                toWrite.add(last + " p" + places + " " + '\n');
-                System.out.println("p" + places + " " + x.steps().get(i).getOutXBMStep().get(h));
-                toWrite.add("p" + places + " " + x.steps().get(i).getOutXBMStep().get(h) + '\n');
-                last = String.valueOf(x.steps().get(i).getOutXBMStep().get(h));
+                printAndWritePlus(last + " p" + places + " ");
+                printAndWritePlus("p" + places + " " + x.steps().get(i).getOutXBMStep().get(0));
+                last = String.valueOf(x.steps().get(i).getOutXBMStep().get(0));
 
                 if (x.steps().size() == i + 1) {
-                    System.out.println(last + " p" + 0 + " ");
-                    toWrite.add(last + " p" + 0 + "\n");
+                    printAndWritePlus(last + " p" + 0 + " ");
                 }
             }
-//                System.out.println(last);
-            System.out.println();
+        } else {
+            resolveConcurrence();
+            hasConcurrence = true;
         }
 
-        System.out.println(".marking {p0} ");
-        toWrite.add(".marking {p0} \n");
+        if (!hasConcurrence) {
+            printAndWritePlus(".marking {p0} ");
+        } else
+            resolveMarking();
 
-        System.out.println(".end");
-        toWrite.add(".end");
+        printAndWritePlus(".end");
 
         WriteFile.write(fileName, toWrite);
     }
 
-    private void dealConcurrence() {
+    int p = 0;
+
+    private void resolveConcurrence() {
+        for (VarXBM varXBM : x.steps().get(0).getInXBMStep()) {
+            printAndWrite(varXBM + " ");
+            for (VarXBM varXBMOut : x.steps().get(0).getOutXBMStep()) {
+                p++;
+                printAndWrite("p" + p + " ");
+            }
+            printAndWritePlus("");
+        }
+
+        for (int i = p - (x.steps().get(0).getInXBMStep().size() * x.steps().get(0).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWritePlus("p" + i + " " + x.steps().get(0).getOutXBMStep().get(0));
+            i++;
+            printAndWritePlus("p" + i + " " + x.steps().get(0).getOutXBMStep().get(1));
+        }
+
+
+        for (VarXBM varXBM : x.steps().get(0).getOutXBMStep()) {
+            printAndWrite(String.valueOf(varXBM));
+            p++;
+            printAndWrite(" p" + p);
+            p++;
+            printAndWrite(" p" + p + '\n');
+        }
+
+        for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWritePlus("p" + i + " " + x.steps().get(1).getInXBMStep().get(0));
+            i++;
+            printAndWritePlus("p" + i + " " + x.steps().get(1).getInXBMStep().get(1));
+        }
+
+        p += x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size();
+
+        for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWritePlus(x.steps().get(1).getInXBMStep().get(0) + " p" + i);
+            i++;
+            printAndWritePlus(x.steps().get(1).getInXBMStep().get(1) + " p" + i);
+        }
+
+        for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWritePlus("p" + i + " " + x.steps().get(1).getOutXBMStep().get(0));
+            i++;
+            printAndWritePlus("p" + i + " " + x.steps().get(1).getOutXBMStep().get(1));
+        }
+
+        for (VarXBM varXBM : x.steps().get(1).getOutXBMStep()) {
+            printAndWrite(varXBM + " ");
+            for (VarXBM varXBMOut : x.steps().get(1).getInXBMStep()) {
+                p++;
+                printAndWrite("p" + p + " ");
+            }
+            printAndWritePlus("");
+
+        }
+
+        for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWritePlus("p" + i + " " + x.steps().get(0).getInXBMStep().get(0));
+            i++;
+            printAndWritePlus("p" + i + " " + x.steps().get(0).getInXBMStep().get(1));
+        }
+    }
+
+    private void resolveMarking() {
+        printAndWrite(".marking{");
+        for (int i = p - (x.steps().get(1).getInXBMStep().size() * x.steps().get(1).getOutXBMStep().size()) + 1; i < p; i++) {
+            printAndWrite(" p" + i + " ");
+            i++;
+            printAndWrite(" p" + i + " ");
+        }
+        printAndWritePlus("}");
 
     }
 
+    private void printAndWrite(String line){
+        System.out.print(line);
+        toWrite.add(line);
+    }
+
+    private void printAndWritePlus(String line){
+        System.out.print(line + "\n");
+        toWrite.add(line + "\n");
+    }
 }

@@ -10,7 +10,7 @@ public class Main {
     private static Scanner fileContent;
 
     public static void main(String[] args) {
-        String fileName = "simple";
+        String fileName = "concurrence-simple";
         openArchive(fileName);
         processData(readFile(), fileName);
         closeArchive();
