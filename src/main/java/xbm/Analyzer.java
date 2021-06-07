@@ -20,7 +20,7 @@ public class Analyzer {
         this.XBM_FILE = XBM_FILE;
     }
 
-    public List<String> interact() {
+    public List<String> interact(String fileName) {
 
         for (String line : XBM_FILE) {
             if (line.toLowerCase().contains("input")) {
@@ -38,7 +38,7 @@ public class Analyzer {
 
         XBMCode XBMCode = new XBMCode(inputs, outputs, steps);
 
-        Compiler compiler = new Compiler(XBMCode);
+        Compiler compiler = new Compiler(XBMCode, fileName);
         compiler.Compile();
 
         return XBM_FILE;

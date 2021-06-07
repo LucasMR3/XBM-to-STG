@@ -11,7 +11,7 @@ public class WriteFile {
     public static void write(String fileName, List<String> content) {
 
         try {
-            File file = new File("out/" + fileName);
+            File file = new File("stg/" + fileName + ".g");
 
             if (!file.exists()) {
                 file.createNewFile();
@@ -31,7 +31,7 @@ public class WriteFile {
     private static String evaluateContent(List<String> content) {
         StringBuilder a = new StringBuilder();
         for (String str : content) {
-            a.append('\n').append(str);
+            a.append(str);
         }
         return a.toString();
     }

@@ -10,27 +10,27 @@ public class Main {
     private static Scanner fileContent;
 
     public static void main(String[] args) {
-        openArchive();
-        List<String> list = readAndProcessData();
+        String fileName = "simple";
+        openArchive(fileName);
+        processData(readFile(), fileName);
         closeArchive();
     }
 
-    private static void openArchive() {
+    private static void openArchive(String fileName) {
         try {
-            fileContent = new Scanner(Paths.get("src/main/resources/simple.xbm"));
+            fileContent = new Scanner(Paths.get("src/main/resources/" + fileName + ".xbm"));
         } catch (IOException errIO) {
             System.err.println("Error while opening file");
         }
 
     }
 
-    private static List<String> processData(List<String> file) {
-//        List<String> process = new ArrayList<>();
+    private static List<String> processData(List<String> file, String fileName) {
         Analyzer analyzer = new Analyzer(file);
-        return analyzer.interact();
+        return analyzer.interact(fileName);
     }
 
-    private static List<String> readAndProcessData() {
+    private static List<String> readFile() {
         List<String> file = new ArrayList<>();
         try {
             while (fileContent.hasNext()) {
@@ -43,7 +43,7 @@ public class Main {
         } catch (Exception err) {
             System.err.println("Error " + err);
         }
-        return processData(file);
+        return file;
     }
 
     private static void closeArchive() {
