@@ -23,9 +23,11 @@ public class Extractor {
     }
 
     public static int first(String line) {
-        int minus = (line.indexOf('-') != -1 ? line.indexOf('-') : 1000);
-        int plus = (line.indexOf('+') != -1 ? line.indexOf('+') : 1000);
+        int minus = (line.indexOf('-') != -1 ? line.indexOf('-') : 123);
+        int plus = (line.indexOf('+') != -1 ? line.indexOf('+') : 123);
 
+        if (minus == 123 && plus == 123)
+            return 0;
         return Math.min(minus, plus);
     }
 }
