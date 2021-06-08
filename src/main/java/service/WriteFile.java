@@ -1,4 +1,4 @@
-package stg;
+package service;
 
 import java.io.BufferedWriter;
 import java.io.File;

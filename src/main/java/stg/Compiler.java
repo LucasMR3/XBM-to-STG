@@ -2,6 +2,7 @@ package stg;
 
 import model.VarXBM;
 import model.XBMCode;
+import service.WriteFile;
 
 import java.util.ArrayList;
 import java.util.List;
